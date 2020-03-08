@@ -71,8 +71,10 @@ def run_plotting(config):
             print('Plotting {} - Region index {} - {}'.format(loop_index, data_index, trace_name))
             if config.differential_plot:
                 y_data = slice_of_data_for_plotting.loc[data_index, :].diff()
+                y_axis_title = 'New Cases'
             else:
                 y_data = slice_of_data_for_plotting.loc[data_index, :]
+                y_axis_title = 'Cumulative Cases'
 
             if country in config.initial_data_to_show or province_or_state in config.initial_data_to_show:
                 visibility_setting = None
@@ -87,7 +89,7 @@ def run_plotting(config):
 
         fig.update_layout(title=plot_title,
                           xaxis_title='Date',
-                          yaxis_title='Cumulative Cases',
+                          yaxis_title=y_axis_title,
                           yaxis_type=y_axis_type)
         # fig.show()
 
@@ -103,7 +105,7 @@ if __name__ == '__main__':
     file_name = r'time_series_19-covid-Confirmed.csv'
     full_datafile_path = data_dir / file_name
     include_georegions_with_at_least_this_many_cases = 100
-    initial_data_to_show = ['UK', 'Italy', 'Germany', 'Taiwan', 'Iran', 'USA', 'Hubei']
+    initial_data_to_show = ['UK', 'Italy', 'Germany', 'Taiwan', 'Iran', 'US', 'Hubei']
 
     for logplot in [True, False]:
         for differential_plot in [True, False]:
