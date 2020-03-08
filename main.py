@@ -40,6 +40,7 @@ if __name__ == '__main__':
             print('Plotting {} - Region index {} - {}'.format(loop_index, data_index, trace_name))
             fig.add_trace(go.Scatter(y=slice_of_data_for_plotting.loc[data_index, :],
                                      x=list(data)[4: -1],
+                                     name=trace_name,
                                      hoverlabel=dict(namelength=-1, bgcolor='rgba(188, 20, 26, 0.5)')))
 
         fig.update_layout(title='Cumulative COVID-19 Cases by Country (Those with At Least {} Cases)'.format(include_georegions_with_at_least_this_many_cases),
