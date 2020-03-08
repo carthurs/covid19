@@ -2,6 +2,7 @@
 #
 # git clone https://github.com/CSSEGISandData/COVID-19.git
 
+import plotly
 import pandas
 import pathlib
 import plotly.graph_objects as go
@@ -46,4 +47,5 @@ if __name__ == '__main__':
         fig.update_layout(title='Cumulative COVID-19 Cases by Country (Those with At Least {} Cases)'.format(include_georegions_with_at_least_this_many_cases),
                           xaxis_title='Date',
                           yaxis_title='Cumulative Cases')
-        fig.show()
+        # fig.show()
+        plotly.offline.plot(fig, filename='/home/chris/covid.html')
