@@ -37,10 +37,19 @@ def run_plotting(config):
 
     print(list(data))
     print(list(data.loc[:, 'Province/State']))
+    tx = [s for s in list(data.loc[:, 'Province/State']) if 'TX' in str(s)]
+    ny = [s for s in list(data.loc[:, 'Province/State']) if 'NY' in str(s)]
+    adddtional_provinces_or_state_names = tx + ny
 
     indices_of_included_georegions = [data_index for data_index, country_or_region in
                                       enumerate(list(data.loc[:, 'Country/Region'])) if
                                       data.loc[data_index, last_available_data_date] > config.include_georegions_with_at_least_this_many_cases]
+
+    custom_additional_georegion_indices = [data_index for data_index, province_or_state in
+                                           enumerate(list(data.loc[:, 'Province/State'])) if
+                                           province_or_state in adddtional_provinces_or_state_names]
+
+    indices_of_included_georegions.extend(custom_additional_georegion_indices)
 
     print("number of graphs to plot:", len(indices_of_included_georegions))
 
@@ -55,7 +64,6 @@ def run_plotting(config):
         plot_title = 'Differential ' + plot_title
     else:
         plot_title = 'Cumulative ' + plot_title
-
 
     if plot_all:
         fig = go.Figure()
