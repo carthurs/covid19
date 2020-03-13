@@ -45,10 +45,12 @@ def run_plotting(config):
     for name_substring in config.additional_locations_to_plot_substrings:
         for province_or_state in list(data.loc[:, 'Province/State']):
             if name_substring in str(province_or_state):
-                adddtional_provinces_or_state_names.append(name_substring)
-        for province_or_state in list(data.loc[:, 'Country/Region']):
-            if name_substring in str(province_or_state):
-                adddtional_provinces_or_state_names.append(name_substring)
+                adddtional_provinces_or_state_names.append(province_or_state)
+        for country_or_region in list(data.loc[:, 'Country/Region']):
+            if name_substring in str(country_or_region):
+                adddtional_provinces_or_state_names.append(country_or_region)
+
+    print(adddtional_provinces_or_state_names)
 
     indices_of_included_georegions = [data_index for data_index, country_or_region in
                                       enumerate(list(data.loc[:, 'Country/Region'])) if
