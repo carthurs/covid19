@@ -9,12 +9,13 @@ import plotly.graph_objects as go
 
 class Configuration(object):
     def __init__(self, full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
-                 differential_plot, initial_data_to_show):
+                 differential_plot, initial_data_to_show, additional_locations_to_plot_substrings):
         self.full_datafile_path = full_datafile_path
         self.include_georegions_with_at_least_this_many_cases = include_georegions_with_at_least_this_many_cases
         self.logplot = logplot
         self.differential_plot = differential_plot
         self.initial_data_to_show = initial_data_to_show
+        self.additional_locations_to_plot_substrings = additional_locations_to_plot_substrings
 
 def run_plotting(config):
     plot_all = True
@@ -37,9 +38,17 @@ def run_plotting(config):
 
     print(list(data))
     print(list(data.loc[:, 'Province/State']))
-    tx = [s for s in list(data.loc[:, 'Province/State']) if 'TX' in str(s)]
-    ny = [s for s in list(data.loc[:, 'Province/State']) if 'NY' in str(s)]
-    adddtional_provinces_or_state_names = tx + ny
+
+    # Custom additional province, state, country or regions to add (i.e. even if they fall below the threshold
+    # case count config.include_georegions_with_at_least_this_many_cases
+    adddtional_provinces_or_state_names = []
+    for name_substring in config.additional_locations_to_plot_substrings:
+        for province_or_state in list(data.loc[:, 'Province/State']):
+            if name_substring in str(province_or_state):
+                adddtional_provinces_or_state_names.append(name_substring)
+        for province_or_state in list(data.loc[:, 'Country/Region']):
+            if name_substring in str(province_or_state):
+                adddtional_provinces_or_state_names.append(name_substring)
 
     indices_of_included_georegions = [data_index for data_index, country_or_region in
                                       enumerate(list(data.loc[:, 'Country/Region'])) if
@@ -49,11 +58,18 @@ def run_plotting(config):
                                            enumerate(list(data.loc[:, 'Province/State'])) if
                                            province_or_state in adddtional_provinces_or_state_names]
 
+    custom_additional_georegion_indices.extend([data_index for data_index, province_or_state in
+                                               enumerate(list(data.loc[:, 'Country/Region'])) if
+                                               province_or_state in adddtional_provinces_or_state_names])
+
     indices_of_included_georegions.extend(custom_additional_georegion_indices)
+    indices_of_included_georegions = list(set(indices_of_included_georegions))  # remove duplicates
+    indices_of_included_georegions = sorted(indices_of_included_georegions, key=lambda i: data.loc[i, 'Country/Region'])
+
 
     print("number of graphs to plot:", len(indices_of_included_georegions))
 
-    plot_title = 'COVID-19 Cases by Country (Those with At Least {} Cases)'.format(config.include_georegions_with_at_least_this_many_cases)
+    plot_title = 'COVID-19 Cases by Region (Those with {}+ Cases, & Custom Additional)'.format(config.include_georegions_with_at_least_this_many_cases)
 
     if config.logplot:
         plot_title = 'Logarithmic ' + plot_title
@@ -113,8 +129,15 @@ if __name__ == '__main__':
     file_name = r'time_series_19-covid-Confirmed.csv'
     full_datafile_path = data_dir / file_name
     include_georegions_with_at_least_this_many_cases = 100
-    initial_data_to_show = ['UK', 'Italy', 'Germany', 'Taiwan', 'Iran', 'US', 'Hubei']
+    initial_data_to_show = ['UK', 'Italy', 'Germany', 'Taiwan', 'Iran', 'Hubei', 'Travis County, TX',
+                            'Hidalgo County, TX', 'Westchester County, NY', 'New York County, NY', 'Harris County, TX',
+                            'Ireland']
+    additional_locations_to_plot_substrings = ['TX', 'NY', 'Ireland']
+
+    # iso_country_names = pandas.read_excel(data_dir / r'ISO.xlsx')
+    # print(iso_country_names)
 
     for logplot in [True, False]:
         for differential_plot in [True, False]:
-            run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot, differential_plot, initial_data_to_show))
+            run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
+                                       differential_plot, initial_data_to_show, additional_locations_to_plot_substrings))
