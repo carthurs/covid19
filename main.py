@@ -194,10 +194,10 @@ if __name__ == '__main__':
                             'Ireland']
     additional_locations_to_plot_substrings = ['TX', 'NY', 'Ireland']
 
-    # for logplot in [True, False]:
-    #     for differential_plot in [True, False]:
-    #         run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
-    #                                    differential_plot, initial_data_to_show, additional_locations_to_plot_substrings))
+    for logplot in [True, False]:
+        for differential_plot in [True, False]:
+            run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
+                                       differential_plot, initial_data_to_show, additional_locations_to_plot_substrings))
 
     create_choropleth(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, False,
                                     False, initial_data_to_show, additional_locations_to_plot_substrings))
