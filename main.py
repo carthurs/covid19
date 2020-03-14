@@ -131,7 +131,7 @@ if __name__ == '__main__':
     file_name = r'time_series_19-covid-Confirmed.csv'
     full_datafile_path = data_dir / file_name
     include_georegions_with_at_least_this_many_cases = 100
-    initial_data_to_show = ['UK', 'Italy', 'Germany', 'Taiwan', 'Iran', 'Hubei', 'Travis County, TX',
+    initial_data_to_show = ['UK', 'United Kingdom', 'Italy', 'Germany', 'Taiwan', 'Iran', 'Hubei', 'Travis County, TX',
                             'Hidalgo County, TX', 'Westchester County, NY', 'New York County, NY', 'Harris County, TX',
                             'Ireland']
     additional_locations_to_plot_substrings = ['TX', 'NY', 'Ireland']
