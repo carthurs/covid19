@@ -6,6 +6,8 @@ import plotly
 import pandas
 import pathlib
 import plotly.graph_objects as go
+import plotly.express as px
+import math
 
 class Configuration(object):
     def __init__(self, full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
@@ -126,6 +128,62 @@ def run_plotting(config):
             output_filename += '_diff'
         plotly.offline.plot(fig, filename='/home/chris/{}.html'.format(output_filename))
 
+def create_choropleth(config):
+    country_codes_dataframe = pandas.read_json(r'country_names_codes_and_iso3.json')
+
+    datasource_specific_name_replacements = pandas.read_json(r'datasource_specific_name_replacements.json')
+
+    data = pandas.read_csv(config.full_datafile_path)
+    last_available_data_date = list(data)[-1]
+    earlier_available_data_date = list(data)[-6]
+    for row_index in range(datasource_specific_name_replacements.shape[0]):
+        data.replace(to_replace=datasource_specific_name_replacements.loc[row_index, 'from'],
+                     value=datasource_specific_name_replacements.loc[row_index, 'to'],
+                     inplace=True)
+
+    # Drop nongeographical regions:
+    regions_to_drop = ['Others', 'Cruise Ship']
+    for region_to_drop in regions_to_drop:
+        index_to_drop = data.loc[data['Country/Region'] == region_to_drop].index
+        data.drop(index_to_drop, inplace=True)
+        data = data.reset_index()
+
+    # Add together all regions of one country
+    data = data.groupby('Country/Region').sum()
+    data = data.reset_index()
+
+    for row_index in range(data.shape[0]):
+        print("data:", data.loc[row_index, 'Country/Region'])
+        # print(data.loc[data['Country/Region'] == 'France'])
+        frame_mask_matching_country = country_codes_dataframe['name'] == data.loc[row_index, 'Country/Region']
+        replacement = country_codes_dataframe.loc[frame_mask_matching_country]['alpha-3']
+        data.loc[row_index, 'Country/Region'] = replacement.values[0]
+
+    data['Growth Exponent'] = [0.0] * data.shape[0]
+    for row_index in range(data.shape[0]):
+        current_cases = data.loc[row_index, last_available_data_date]
+        earlier_cases = data.loc[row_index, earlier_available_data_date]
+
+        if current_cases > 0 and earlier_cases > 0:
+            data.loc[row_index, 'Growth Exponent'] = (math.log(current_cases) - math.log(earlier_cases)) / 5.0
+        else:
+            data.loc[row_index, 'Growth Exponent'] = 0.0
+
+    print(data['Country/Region'])
+    for i in range(data.shape[0]):
+        if data.loc[i, 'Country/Region'] == 'GBR':
+            print(data.loc[i, :])
+
+    choropleth = px.choropleth(data, locations='Country/Region', color='Growth Exponent',
+                               color_continuous_scale=px.colors.sequential.Plasma)
+
+    choropleth.update_layout(title='Growth Exponent Alpha [for N(t) = N(0)exp(Alpha * t); N(t)=num cases by day t] - Previous Five Days')
+
+    output_filename = 'choropleth_five_day_exponent'
+    plotly.offline.plot(choropleth, filename='/home/chris/{}.html'.format(output_filename))
+    # choropleth.show()
+
+
 if __name__ == '__main__':
     data_dir = pathlib.Path(r'/home/chris/WorkData/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series')
     file_name = r'time_series_19-covid-Confirmed.csv'
@@ -136,10 +194,10 @@ if __name__ == '__main__':
                             'Ireland']
     additional_locations_to_plot_substrings = ['TX', 'NY', 'Ireland']
 
-    # iso_country_names = pandas.read_excel(data_dir / r'ISO.xlsx')
-    # print(iso_country_names)
+    # for logplot in [True, False]:
+    #     for differential_plot in [True, False]:
+    #         run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
+    #                                    differential_plot, initial_data_to_show, additional_locations_to_plot_substrings))
 
-    for logplot in [True, False]:
-        for differential_plot in [True, False]:
-            run_plotting(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, logplot,
-                                       differential_plot, initial_data_to_show, additional_locations_to_plot_substrings))
+    create_choropleth(Configuration(full_datafile_path, include_georegions_with_at_least_this_many_cases, False,
+                                    False, initial_data_to_show, additional_locations_to_plot_substrings))

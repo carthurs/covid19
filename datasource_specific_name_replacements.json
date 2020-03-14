@@ -1,0 +1,30 @@
+[
+    { "from": "Korea, South", "to": "Korea, Republic of" },
+    { "from": "South Korea", "to": "Korea, Republic of" },
+    { "from": "US", "to": "United States of America" },
+    { "from": "Brunei", "to": "Brunei Darussalam" },
+    { "from": "Iran", "to": "Iran (Islamic Republic of)" },
+    { "from": "Taiwan", "to": "Taiwan, Province of China" },
+    { "from": "Taiwan*", "to": "Taiwan, Province of China" },
+    { "from": "Vietnam", "to": "Viet Nam" },
+    { "from": "Russia", "to": "Russian Federation" },
+    { "from": "Moldova", "to": "Moldova, Republic of" },
+    { "from": "Bolivia", "to": "Bolivia (Plurinational State of)" },
+    { "from": "Congo (Kinshasa)", "to": "Congo, Democratic Republic of the" },
+    { "from": "Cote d'Ivoire", "to": "Côte d'Ivoire" },
+    { "from": "Reunion", "to": "Réunion" },
+    {
+        "from": "United Kingdom",
+        "to": "United Kingdom of Great Britain and Northern Ireland"
+    },
+    {
+        "from": "UK",
+        "to": "United Kingdom of Great Britain and Northern Ireland"
+    },
+    { "from": "Mainland China", "to": "China" },
+    { "from": "Macau", "to": "Macao" },
+    { "from": "Czech Republic", "to": "Czechia" },
+    { "from": "Saint Barthelemy", "to": "Saint Barthélemy" },
+    { "from": "Palestine", "to": "Palestine, State of" },
+    { "from": "Vatican City", "to": "Holy See" }
+]
