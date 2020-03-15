@@ -26,5 +26,8 @@
     { "from": "Czech Republic", "to": "Czechia" },
     { "from": "Saint Barthelemy", "to": "Saint Barthélemy" },
     { "from": "Palestine", "to": "Palestine, State of" },
-    { "from": "Vatican City", "to": "Holy See" }
+    { "from": "Vatican City", "to": "Holy See" },
+    { "from":  "Curacao", "to": "Curaçao" },
+    { "from":  "Venezuela", "to":  "Venezuela (Bolivarian Republic of)"},
+    { "from":  "occupied Palestinian territory", "to":  "Palestine, State of"}
 ]
