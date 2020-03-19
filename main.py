@@ -2,6 +2,8 @@
 #
 # git clone https://github.com/CSSEGISandData/COVID-19.git
 
+import datetime
+
 import plotly
 import pathlib
 import plotly.express as px
@@ -18,7 +20,9 @@ def create_choropleth(config):
     print(data)
 
     choropleth.update_layout(
-        title='Growth Exponent Alpha [for N(t) = N(0)exp(Alpha * t); N(t)=num cases by day t] - Previous Five Days')
+        title='Growth Exponent Alpha [for N(t) = N(0)exp(Alpha * t); N(t)=num cases by day t] - Previous Five Days ({} GMT)'
+            .format(datetime.datetime.now().isoformat())
+    )
 
     output_filename = 'choropleth_five_day_exponent'
     plotly.offline.plot(choropleth, filename='/home/chris/{}.html'.format(output_filename))

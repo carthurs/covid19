@@ -29,5 +29,9 @@
     { "from": "Vatican City", "to": "Holy See" },
     { "from":  "Curacao", "to": "Curaçao" },
     { "from":  "Venezuela", "to":  "Venezuela (Bolivarian Republic of)"},
-    { "from":  "occupied Palestinian territory", "to":  "Palestine, State of"}
+    { "from":  "occupied Palestinian territory", "to":  "Palestine, State of"},
+    { "from":  "Congo (Brazzaville)", "to":  "Congo"},
+    { "from":  "Gambia, The", "to":  "Gambia"},
+    { "from":  "Tanzania", "to":  "Tanzania, United Republic of"},
+    { "from":  "The Bahamas", "to":  "Bahamas"}
 ]
