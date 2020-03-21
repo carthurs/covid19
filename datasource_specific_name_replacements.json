@@ -33,5 +33,6 @@
     { "from":  "Congo (Brazzaville)", "to":  "Congo"},
     { "from":  "Gambia, The", "to":  "Gambia"},
     { "from":  "Tanzania", "to":  "Tanzania, United Republic of"},
-    { "from":  "The Bahamas", "to":  "Bahamas"}
+    { "from":  "The Bahamas", "to":  "Bahamas"},
+    { "from":  "Bahamas, The", "to":  "Bahamas"}
 ]
