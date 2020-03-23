@@ -34,5 +34,8 @@
     { "from":  "Gambia, The", "to":  "Gambia"},
     { "from":  "Tanzania", "to":  "Tanzania, United Republic of"},
     { "from":  "The Bahamas", "to":  "Bahamas"},
-    { "from":  "Bahamas, The", "to":  "Bahamas"}
+    { "from":  "Bahamas, The", "to":  "Bahamas"},
+    { "from":  "Cape Verde", "to":  "Cabo Verde"},
+    { "from":  "East Timor", "to":  "Timor-Leste"},
+    { "from":  "Syria", "to":  "Syrian Arab Republic"}
 ]
