@@ -2,6 +2,25 @@ import pandas
 import math
 import plotly.graph_objects as go
 import plotly
+import logging
+
+def create_logger():
+    logger = logging.getLogger('covid')
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    file_log_handler = logging.FileHandler('covidLog.txt')
+    file_log_handler.setLevel(logging.INFO)
+    file_log_handler.setFormatter(formatter)
+    logger.addHandler(file_log_handler)
+
+    return logger
 
 def run_plotting(config):
     plot_all = True
@@ -114,6 +133,7 @@ def run_plotting(config):
 
 
 def get_choropleth_data(config):
+    my_logger = create_logger()
     country_codes_dataframe = pandas.read_json(r'country_names_codes_and_iso3.json')
 
     datasource_specific_name_replacements = pandas.read_json(r'datasource_specific_name_replacements.json')
@@ -140,7 +160,10 @@ def get_choropleth_data(config):
         # print(data.loc[data['Country/Region'] == 'France'])
         frame_mask_matching_country = country_codes_dataframe['name'] == data.loc[row_index, 'Country/Region']
         replacement = country_codes_dataframe.loc[frame_mask_matching_country]['alpha-3']
-        data.loc[row_index, 'Country/Region'] = replacement.values[0]
+        try:
+            data.loc[row_index, 'Country/Region'] = replacement.values[0]
+        except IndexError:
+            my_logger.error("Unknown country name: {}".format(data.loc[row_index, 'Country/Region']))
 
     number_of_columns_added = 0
     for growth_exponent_lag in range(-10, 0):
